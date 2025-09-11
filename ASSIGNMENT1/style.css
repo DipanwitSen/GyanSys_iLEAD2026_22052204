@@ -1,0 +1,403 @@
+* {
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box;
+}
+body {
+  min-height: 100vh;
+  background: #001;
+  overflow: hidden;
+  transition: background 2s;
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+}
+.title {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px #fff;
+  z-index: 10;
+  font-size: 28px;
+  user-select: none;
+}
+.curtain {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: #111;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.4);
+  z-index: 5;
+  overflow: hidden;
+  transition: transform 1.5s ease-in-out;
+  transform-origin: center bottom;
+}
+.left-curtain {
+  left: 0;
+  transform-origin: left bottom;
+}
+.right-curtain {
+  right: 0;
+  transform-origin: right bottom;
+}
+body.on .left-curtain {
+  animation: leftCurtainOpen 1.5s forwards;
+}
+body.on .right-curtain {
+  animation: rightCurtainOpen 1.5s forwards;
+}
+body:not(.on) .left-curtain {
+  animation: leftCurtainClose 1.5s forwards;
+}
+body:not(.on) .right-curtain {
+  animation: rightCurtainClose 1.5s forwards;
+}
+@keyframes leftCurtainOpen {
+  0% { transform: rotate(0deg) translateX(0); }
+  60% { transform: rotate(-15deg) translateX(-100%); }
+  80% { transform: rotate(-12deg) translateX(-100%); }
+  100% { transform: rotate(-15deg) translateX(-100%); }
+}
+@keyframes rightCurtainOpen {
+  0% { transform: rotate(0deg) translateX(0); }
+  60% { transform: rotate(15deg) translateX(100%); }
+  80% { transform: rotate(12deg) translateX(100%); }
+  100% { transform: rotate(15deg) translateX(100%); }
+}
+@keyframes leftCurtainClose {
+  0% { transform: rotate(-15deg) translateX(-100%); }
+  20% { transform: rotate(-12deg) translateX(-100%); }
+  40% { transform: rotate(-15deg) translateX(-100%); }
+  100% { transform: rotate(0deg) translateX(0); }
+}
+@keyframes rightCurtainClose {
+  0% { transform: rotate(15deg) translateX(100%); }
+  20% { transform: rotate(12deg) translateX(100%); }
+  40% { transform: rotate(15deg) translateX(100%); }
+  100% { transform: rotate(0deg) translateX(0); }
+}
+.bulb-curtain {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+.tv-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 250px;
+  background: #000;
+  border: 6px solid #444;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+  z-index: 6;
+}
+body:not(.on) .tv-screen {
+  opacity: 1;
+  pointer-events: auto;
+}
+.tv-screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.moon {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle at 30% 30%, #fff 70%, #ccc 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 60px rgba(255, 255, 200, 0.7);
+  opacity: 0;
+  z-index: 4;
+  transition: left 0.1s linear, top 0.1s linear, opacity 0.5s;
+  pointer-events: none;
+}
+body.on .moon,
+body.on .sun,
+body.on .phase-text-area {
+  opacity: 1;
+  pointer-events: auto;
+}
+.moon .crater {
+  position: absolute;
+  background: rgba(200, 200, 200, 0.5);
+  border-radius: 50%;
+}
+.c1 { width: 20px; height: 20px; top: 20px; left: 30px; }
+.c2 { width: 15px; height: 15px; top: 60px; left: 80px; }
+.c3 { width: 10px; height: 10px; top: 90px; left: 40px; }
+.c4 { width: 18px; height: 18px; top: 40px; left: 90px; }
+.sun {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #FFD700 60%, #FFA500 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 60px rgba(255, 200, 0, 0.7);
+  opacity: 0;
+  z-index: 4;
+  transition: left 0.1s linear, top 0.1s linear, opacity 0.5s;
+  pointer-events: none;
+}
+.phase-text-area {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 7;
+  max-width: 600px;
+  opacity: 0;
+  transition: opacity 0.5s;
+  user-select: none;
+  pointer-events: none;
+}
+
+.phase-text-area .phase-title {
+  font-size: 28px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px #fff;
+}
+.phase-text-area .phase-description {
+  font-size: 18px;
+  line-height: 1.4;
+  max-width: 500px;
+  margin: 0 auto;
+  text-shadow: 0 0 5px #fff;
+}
+.front-scene {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  z-index: 6;
+  user-select: none;
+}
+.girl-rope-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.rope {
+  width: 5px;
+  height: 150px;
+  background: #aa7744;
+  margin-bottom: 10px;
+  position: relative;
+  transition: height 0.05s linear;
+}
+.knot {
+  width: 15px;
+  height: 15px;
+  background: #885522;
+  border-radius: 50%;
+  position: absolute;
+  top: 50px;
+  left: -5px;
+  box-shadow: 0 0 5px #000;
+}
+.girl {
+  position: relative;
+  width: 60px;
+  height: 140px;
+}
+.girl .hair {
+  width: 50px;
+  height: 50px;
+  background: #3a2a1b;
+  border-radius: 50%;
+  position: absolute;
+  top: -5px;
+  left: 5px;
+}
+.girl .head {
+  width: 40px;
+  height: 40px;
+  background: #ffccaa;
+  border-radius: 50%;
+  margin: 0 auto;
+  position: relative;
+}
+.girl .body {
+  width: 15px;
+  height: 40px;
+  background: #ff6699;
+  margin: 0 auto;
+}
+.girl .dress {
+  width: 40px;
+  height: 40px;
+  background: #ff6699;
+  border-radius: 0 0 20px 20px;
+  margin: -5px auto 0 auto;
+}
+.girl .arm {
+  width: 45px;
+  height: 6px;
+  background: #ffccaa;
+  position: absolute;
+  top: 50px;
+  left: -5px;
+  border-radius: 3px;
+}
+.girl .leg {
+  width: 10px;
+  height: 40px;
+  background: #333;
+  position: absolute;
+  bottom: 0;
+}
+.girl .leg.left { left: 8px; }
+.girl .leg.right { right: 8px; }
+.girl .shoe {
+  width: 15px;
+  height: 8px;
+  background: #222;
+  position: absolute;
+  bottom: 0;
+  border-radius: 3px;
+}
+.girl .shoe.left { left: 5px; }
+.girl .shoe.right { right: 5px; }
+.bulb-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  user-select: none;
+}
+.wire {
+  width: 4px;
+  height: 250px;
+  background: #222;
+}
+@keyframes bulbBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+.blink {
+  animation: bulbBlink 0.5s ease-in-out 1;
+}
+.bulb {
+  width: 70px;
+  height: 70px;
+  background: #333;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  box-shadow: inset -3px -5px 10px rgba(0, 0, 0, 0.6);
+  transition: all 0.5s;
+}
+body.on .bulb {
+  background: #fff;
+  box-shadow: 0 0 30px #fff, 0 0 80px #fff;
+}
+.switch {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(#ddd, #bbb);
+  border: 3px solid #000;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.switch .btn {
+  width: 25px;
+  height: 40px;
+  background: linear-gradient(#777, #fff, #777);
+  border-radius: 6px;
+  border: 2px solid #000;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+body.on .switch .btn {
+  transform: translateX(15px);
+}
+.flower {
+  position: absolute;
+  top: -50px;
+  width: 25px;
+  height: 25px;
+  background: radial-gradient(circle, #ff88aa 20%, #ff4477 80%);
+  border-radius: 50%;
+  animation: fall linear forwards, spin 6s linear infinite;
+  z-index: 4;
+  box-shadow: 0 0 10px #ff99bb;
+}
+body:not(.on).flower {
+  display: block;
+}
+.left-curtain::before,
+.right-curtain::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 40px 40px;
+  background-position: 10px 10px, 30px 30px, 20px 50px, 40px 70px, 15px 90px;
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+  z-index: 2;
+}
+body:not(.on) .left-curtain::before,
+body:not(.on) .right-curtain::before {
+  opacity: 1;
+}
+@keyframes fall {
+  to { transform: translateY(110vh) rotate(360deg); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+/* Girl arm animations */
+@keyframes arm-move {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-25deg); }
+  100% { transform: rotate(0deg); }
+}
+@keyframes arm-move-reverse {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(25deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Dense colorful blinking lights on curtain */
+.curtain-light {
+  position: absolute;
+  width: 8px;   /* smaller, so more can fit */
+  height: 8px;
+  border-radius: 50%;
+  top: calc(2% + (96% * var(--y)));   /* full height */
+  left: calc(2% + (96% * var(--x)));  /* full width */
+  background: var(--color, #fff);
+  opacity: 0.6;
+  animation: blink 1.5s infinite alternate;
+  animation-delay: calc(var(--delay, 0) * 1s);
+}
+
+@keyframes blink {
+  from { opacity: 0.2; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1.2); }
+}
+
+
+
